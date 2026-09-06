@@ -1,0 +1,138 @@
+:root {
+  --light-color: #f43f5e;
+  --dark-color: #1f2937;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: var(--dark-color);
+}
+
+main {
+  background-color: #1f2937fe;
+  padding: 1rem;
+  height: 80vh;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+main .jamming-button {
+    width: 64px;
+    height: 64px;
+    border-radius: 30px;
+    border: none;
+    background-color: #f43f5e;
+    font-size: 35px;
+    text-align: center;
+    cursor: pointer;
+}
+
+main .jamming-button:hover {
+    border: solid 6px #1f2937;
+}
+
+main .jamming-button:active {
+    background-color: #1f2937;
+}
+main ul.card-container {
+  list-style: none;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+main ul.card-container li.trackItem {
+  background-color: var(--light-color);
+  border-radius: 1rem;
+  padding: 0.5rem;
+
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  gap: 0.3rem;
+}
+
+main ul.card-container li.trackItem img {
+  grid-row: span 2;
+}
+
+main ul.card-container li.trackItem p {
+  grid-column: 2/3;
+  grid-row: 1/2;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  width: 100%;
+}
+
+main ul.card-container li.trackItem span {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  width: 100%;
+}
+
+main ul.card-container li.trackItem button {
+  grid-row: span 2;
+}
+
+main section.playlistJamming {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--light-color);
+  /* height: 50%; */
+  overflow: hidden;
+}
+main section.playlistJamming h2{
+  text-align: center;
+  font-size: 2rem;
+  color: var(--dark-color);
+  padding: 1rem;
+  cursor: default;
+}
+main section.search {
+  background-color: var(--dark-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+section.search form {
+    background-color: #f43f5e;
+    height: 20%;
+    /* margin: 0 auto; */
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+section.search form input {
+    flex: 1;
+    color: #f43f5e;
+    background-color: #1F2937;
+    border: none;
+}
+
+section.search form button {
+    font-size: 2rem;
+    background-color: #1F2937;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
