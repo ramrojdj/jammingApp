@@ -1,13 +1,18 @@
 import { useState } from "react";
+import { doSearch } from "../services/auth/spotifyTools";
 
 export default function FormSearch() {
     const [inputSong, setInputSong] = useState("");
     function handleInputChange(event){
         setInputSong(event.target.value);
     };
-    function handleSubmit(event){
+    async function handleSubmit(event){
         event.preventDefault();
-        return console.log(inputSong);
+        const listaCanciones = await doSearch(inputSong);
+        console.log(listaCanciones.tracks.items);
+
+   
+        
     }
     return (
         <form onSubmit={handleSubmit}>

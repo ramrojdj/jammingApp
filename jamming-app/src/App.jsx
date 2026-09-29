@@ -1,36 +1,43 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import ButtonJamming from '../src/components/ButtonJamming';
-import FormSearch from '../src/components/FormSearch';
-import TrackItem from './components/TrackItlem';  
-import './App.css'
+import { useState, useEffect } from "react";
+import { AppContent } from "./components/AppContent";
+import { getSpotifyCode, initAuth, getRefreshToken } from "./services/auth/spotifyAuth";
+import { isTokenExpired } from "./services/auth/spotifyTools";
 
+// import { AuthProvider, useAuth } from './services/auth/AuthContext';
 function App() {
- 
-  return (
-    <>
-      <header>
-        <h1>Jamming Spotify</h1>
-      </header>
-      <main>
-        <section className="playlistJamming">
-          <h2>Jamming Playlist</h2>
-          <ul className="card-container">
-          </ul>
-        </section>
+  const [isLogged, setIsLogged] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-        <section className="search">
-          <FormSearch/>
-          <ul className="card-container">
-            <TrackItem cover="https://i.scdn.co/image/ab67616d0000485105d081cbdc2f67d37a364d63" name="dd" artist="66" id="1"/>
-          </ul>
-          
-        </section>
-      </main>
-    </>
+  const swithLog = () => {
+    isLogged ? setIsLogged(false) : setIsLogged(true);
+    loading ? setLoading(false) : setIsLogged(true);
+  };
+
+  useEffect(() => {
+    async function auth() {
+      if (window.localStorage.getItem("refresh_token")) {
+        console.log("existe refresh token")
+        if (!isTokenExpired()) {
+          console.log("activo");
+          swithLog();
+        } else {
+          console.log("expirado iniiando refresh");
+          const isRefresehd = await (getRefreshToken());
+          swithLog();
+        }
+      } else {
+        console.log("no hay refresh token iniciando de 0");
+        // await initAuth();
+        // swithLog();
+      };
+    }
+    auth();
+  }, []);
+
+  return (
+    <AppContent isLogged={isLogged} loading={loading} />
   )
+
 };
 
 export default App;
