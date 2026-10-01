@@ -1,41 +1,66 @@
 import { useState, useEffect } from "react";
 import { AppContent } from "./components/AppContent";
-import { getSpotifyCode, initAuth, getRefreshToken } from "./services/auth/spotifyAuth";
-import { isTokenExpired } from "./services/auth/spotifyTools";
+import { getToken, isTokenExpired, getRefreshToken, getSpotifyCode } from "./services/auth/spotifyAuth";
 
 // import { AuthProvider, useAuth } from './services/auth/AuthContext';
 function App() {
-  const [isLogged, setIsLogged] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [authStatus, setAuthStatus] = useState("loading");
 
-  const swithLog = () => {
-    isLogged ? setIsLogged(false) : setIsLogged(true);
-    loading ? setLoading(false) : setIsLogged(true);
-  };
 
   useEffect(() => {
-    async function auth() {
-      if (window.localStorage.getItem("refresh_token")) {
-        console.log("existe refresh token")
-        if (!isTokenExpired()) {
-          console.log("activo");
-          swithLog();
+    async function initAuth() {
+      // 1. sesion previa? 
+      const refresh_token = window.localStorage.getItem("refresh_token");
+      if (!refresh_token) {
+        // no hay refresh token revsar si vengo de code 
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("code");
+        if (!code) {
+          console.log("ni previa ni code");
+          await getSpotifyCode();
+          return;
+        };
+        const islogged = await getToken(code);
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        );
+        if (islogged) {
+          console.log("logeo exitoso desde token");
+          setAuthStatus("logged");
+          return;
         } else {
-          console.log("expirado iniiando refresh");
-          const isRefresehd = await (getRefreshToken());
-          swithLog();
-        }
-      } else {
-        console.log("no hay refresh token iniciando de 0");
-        // await initAuth();
-        // swithLog();
+          console.log("nonononon desde getToken");
+        };
       };
-    }
-    auth();
+      // 2. si hay previa 
+      if (!isTokenExpired()) {
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname
+        );
+        console.log("logeo exitoso desde previa");
+        setAuthStatus("logged");
+        return;
+      };
+      const isLogged = await getRefreshToken();
+      if (!isLogged) {
+        console.log("nonono desde refreshToken");
+        return;
+      };
+      console.log("logeo exitoso desde expired");
+      setAuthStatus("logged");
+    };
+    initAuth();
   }, []);
 
+
+
+
   return (
-    <AppContent isLogged={isLogged} loading={loading} />
+    <AppContent userState={authStatus} setUserState={setAuthStatus} />
   )
 
 };

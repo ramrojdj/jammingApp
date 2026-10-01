@@ -1,6 +1,10 @@
 // import { useAuth } from "../services/auth/AuthContext"
 import { logout } from "../services/auth/spotifyAuth"
-export function ButtonLogout() {
-    return <button className="buttonLogs" onClick={logout}>Logout</button>
-
+export function ButtonLogout({ setUserState }) {
+    function handleLogout(){
+        logout();
+        setUserState("error");
+    };
+    return <button className="buttonLogs" onClick={handleLogout}>Logout</button>
+    
 };
